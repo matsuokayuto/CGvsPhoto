@@ -373,7 +373,8 @@ class Model:
 
           h_conv2 = tf.nn.relu(conv2d(self.h_convs[i-1], W_conv2) + b_conv2, 
                                name = 'Activated_2')
-
+          
+          self.h_conv2 = h_conv2
           self.h_convs.append(h_conv2)    
 
 
