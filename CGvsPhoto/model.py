@@ -1329,12 +1329,22 @@ class Model:
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       feed_dict = {self.x: im, self.keep_prob: 1.0}
-      filtered = self.h_conv1.eval(feed_dict = feed_dict)
+      filtered1 = self.h_conv1.eval(feed_dict = feed_dict)
+      filtered2 = self.h_conv2.eval(feed_dict = feed_dict)
 
-      for i in range(filtered.shape[3]):
+      print('   the first filtered layers...')
+      for i in range(filtered1.shape[3]):
         plt.figure()
-        plt.imshow(filtered[0,:,:,i], cmap = 'gray')
+        plt.imshow(filtered1[0,:,:,i], cmap = 'gray')
         plt.show()
+      
+      print('   the second filtered layers...')
+      for i in range(filtered2.shape[3]):
+        plt.figure()
+        plt.imshow(filtered2[0,:,:,i], cmap = 'gray')
+        plt.show()
+      
+      
 
 
 
