@@ -1333,19 +1333,35 @@ class Model:
       filtered2 = self.h_conv2.eval(feed_dict = feed_dict)
       
       print('   the first filtered layers...')
+      filtered1_height = 4
+      filtered1_width = int(filtered1.shape[3]/filtered1_height)
+      img_filtered1, axes_filtered1 = plt.subplots(nrows = filtered1_width, ncols = filtered1_height)
+      gs1_filtered1 = gridspec.GridSpec(filtered_height, filtered_width)
       for i in range(filtered1.shape[3]):
-        plt.figure()
-        plt.imshow(filtered1[0,:,:,i], cmap = 'gray')
-        plt.show()
-      
+        ax1_filtered1 = plt.subplot(gs1_filtered1[i])
+        ax1_filtered1.axis('off')
+        im_filtered1 = plt.imshow(filtered1[0,:,:,i], cmap = 'gray')
+        ax1_filtered1.set_xticklabels([])
+        ax1_filtered1.set_yticklabels([])
+        ax1_filtered1.autoscale(False)
+        img_filtered1.subplots_adjust(wspace = 0.2, hspace = 0.2)
+        plt.show(img_filtered1)
+        
       print('   the second filtered layers...')
+      filtered2_height = 8
+      filtered2_width = int(filtered2.shape[3]/filtered2_height)
+      img_filtered2, axes_filtered2 = plt.subplots(nrows = filtered2_width, ncols = filtered2_height)
+      gs1_filtered2 = gridspec.GridSpec(filtered_height, filtered_width)
       for i in range(filtered2.shape[3]):
-        plt.figure()
-        plt.imshow(filtered2[0,:,:,i], cmap = 'gray')
-        plt.show()
+        ax1_filtered2 = plt.subplot(gs1_filtered2[i])
+        ax1_filtered2.axis('off')
+        im_filtered2 = plt.imshow(filtered2[0,:,:,i], cmap = 'gray')
+        ax1_filtered2.set_xticklabels([])
+        ax1_filtered2.set_yticklabels([])
+        ax1_filtered2.autoscale(False)
+        img_filtered2.subplots_adjust(wspace = 0.2, hspace = 0.2)
+        plt.show(img_filtered2)
       
-
-
 
   def test_splicing(self, data_path, nb_images, save_images = True, show_images = False,
                     minibatch_size = 25):
