@@ -1332,6 +1332,7 @@ class Model:
       feed_dict = {self.x: im, self.keep_prob: 1.0}
       filtered1 = self.h_conv1.eval(feed_dict = feed_dict)
       filtered2 = self.h_conv2.eval(feed_dict = feed_dict)
+      filtered3 = self.flatten.eval(feed_dict = feed_dict)
 
       print('   the first filtered layers...')
       for i in range(filtered1.shape[3]):
@@ -1345,6 +1346,11 @@ class Model:
         plt.imshow(filtered2[0,:,:,i], cmap = 'gray')
         plt.show()
       
+      print('   the flatten filtered layers...')
+      for i in range(filtered3.shape[1]):
+        plt.figure()
+        plt.imshow(filtered3[0,i], cmap = 'gray')
+        plt.show()
       
 
 
