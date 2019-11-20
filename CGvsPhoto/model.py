@@ -1344,8 +1344,8 @@ class Model:
         ax1_filtered1.set_xticklabels([])
         ax1_filtered1.set_yticklabels([])
         ax1_filtered1.autoscale(False)
-        img_filtered1.subplots_adjust(wspace = 0.2, hspace = 0.2)
-        plt.show(img_filtered1)
+      img_filtered1.subplots_adjust(wspace = 0.2, hspace = 0.2)
+      plt.show(img_filtered1)
         
       print('   the second filtered layers...')
       filtered2_height = 8
@@ -1359,8 +1359,8 @@ class Model:
         ax1_filtered2.set_xticklabels([])
         ax1_filtered2.set_yticklabels([])
         ax1_filtered2.autoscale(False)
-        img_filtered2.subplots_adjust(wspace = 0.2, hspace = 0.2)
-        plt.show(img_filtered2)
+      img_filtered2.subplots_adjust(wspace = 0.2, hspace = 0.2)
+      plt.show(img_filtered2)
       
 
   def test_splicing(self, data_path, nb_images, save_images = True, show_images = False,
