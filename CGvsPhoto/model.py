@@ -1336,7 +1336,7 @@ class Model:
       filtered1_height = 4
       filtered1_width = int(filtered1.shape[3]/filtered1_height)
       img_filtered1, axes_filtered1 = plt.subplots(nrows = filtered1_width, ncols = filtered1_height)
-      gs1_filtered1 = gridspec.GridSpec(filtered_height, filtered_width)
+      gs1_filtered1 = gridspec.GridSpec(filtered1_height, filtered1_width)
       for i in range(filtered1.shape[3]):
         ax1_filtered1 = plt.subplot(gs1_filtered1[i])
         ax1_filtered1.axis('off')
@@ -1351,7 +1351,7 @@ class Model:
       filtered2_height = 8
       filtered2_width = int(filtered2.shape[3]/filtered2_height)
       img_filtered2, axes_filtered2 = plt.subplots(nrows = filtered2_width, ncols = filtered2_height)
-      gs1_filtered2 = gridspec.GridSpec(filtered_height, filtered_width)
+      gs1_filtered2 = gridspec.GridSpec(filtered2_height, filtered2_width)
       for i in range(filtered2.shape[3]):
         ax1_filtered2 = plt.subplot(gs1_filtered2[i])
         ax1_filtered2.axis('off')
