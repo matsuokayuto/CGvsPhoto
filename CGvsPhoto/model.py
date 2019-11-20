@@ -36,7 +36,7 @@ import pickle
 
 # seed initialisation
 print("\n   random initialisation ...")
-random_seed = int(time.time() % 10000 ) 
+random_seed = 2372 
 random.seed(random_seed)  # for reproducibility
 print('   random seed =', random_seed)
 
