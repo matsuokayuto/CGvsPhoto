@@ -516,30 +516,63 @@ class Model:
     """
     if show_filters: 
       
-      nb_height = 4
-      nb_width = int(self.nf[0]/nb_height)
+    # first filter
+    
+      nb_height_filter1 = 4
+      nb_width_filter1 = int(self.nf[0]/nb_height_filter1)
 
-      img, axes = plt.subplots(nrows = nb_width, ncols = nb_height)
-      gs1 = gridspec.GridSpec(nb_height, nb_width)
+      img_filter1, axes_filter1 = plt.subplots(nrows = nb_width_filter1, ncols = nb_height_filter1)
+      gs1_filter1 = gridspec.GridSpec(nb_height_filter1, nb_width_filter1)
+      print('   the first filter...')
       for i in range(self.nf[0]):
-        ax1 = plt.subplot(gs1[i])
-        ax1.axis('off')
-        im = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -5, vmax = 5)
+        ax1_filter1 = plt.subplot(gs1_filter1[i])
+        ax1_filter1.axis('off')
+        im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
 
-        ax1.set_xticklabels([])
-        ax1.set_yticklabels([]) 
-        ax1.autoscale(False)
+        ax1_filter1.set_xticklabels([])
+        ax1_filter1.set_yticklabels([]) 
+        ax1_filter1.autoscale(False)
         # axes.get_yaxis().set_ticks([])
         # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
         # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
-        ax1.set_title("Filter " + str(i + 1), fontsize = 12.0)    
+        ax1_filter1.set_title(str(i + 1), fontsize = 12.0)    
 
-      img.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
-      cbar_ax = img.add_axes([0.75, 0.15, 0.03, 0.7])
-      cbar = img.colorbar(im, ticks=[-5, 0, 5], cax=cbar_ax)
-      cbar.ax.set_yticklabels(['< -5', '0', '> 5'])
-      plt.show(img)
-      plt.close()     
+      img_filter1.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
+      cbar_ax_filter1 = img_filter1.add_axes([0.75, 0.15, 0.03, 0.7])
+      cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter1)
+      cbar_filter1.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      plt.show(img_filter1)
+      plt.close() 
+      
+    # second filter
+    
+      nb_height_filter2 = 8
+      nb_width_filter2 = int(self.nf[1]/nb_height_filter2)
+
+      img_filter2, axes_filter2 = plt.subplots(nrows = nb_width_filter2, ncols = nb_height_filter2)
+      gs1_filter2 = gridspec.GridSpec(nb_height_filter2, nb_width_filter2)
+      print('   the first filter...')
+      for i in range(self.nf[1]):
+        ax1_filter2 = plt.subplot(gs1_filter2[i])
+        ax1_filter2.axis('off')
+        im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+
+        ax1_filter2.set_xticklabels([])
+        ax1_filter2.set_yticklabels([]) 
+        ax1_filter2.autoscale(False)
+        # axes.get_yaxis().set_ticks([])
+        # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
+        # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
+        ax1_filter2.set_title(str(i + 1), fontsize = 12.0)    
+
+      img_filter2.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
+      cbar_ax_filter2 = img_filter2.add_axes([0.75, 0.15, 0.03, 0.7])
+      cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter2)
+      cbar_filter2.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      plt.show(img_filter2)
+      plt.close() 
+        
+    
 
     if plot_histograms and self.feature_extractor != 'Hist':
       print("Can't plot the histograms, feature extractor is 'Stats'...")
@@ -620,7 +653,7 @@ class Model:
 
 
   def train(self, nb_train_batch, nb_test_batch, 
-            nb_validation_batch, validation_frequency = 10, show_filters = False):
+            nb_validation_batch, validation_frequency = 100, show_filters = False):
     """Trains the model on the selected database training set.
       
     Trains a blank single-image classifer (or initialized with some pre-trained weights). 
