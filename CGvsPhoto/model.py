@@ -366,6 +366,7 @@ class Model:
           with tf.name_scope('Weights'):
             W_conv2 = weight_variable([self.filter_size, self.filter_size, nf[i-1], nf[i]],
                                       self.filter_size*self.filter_size*nf[i-1])
+            self.W_conv2 = W_conv2
             self.W_convs.append(W_conv2)
           with tf.name_scope('Bias'):
             b_conv2 = bias_variable([nf[i]])
@@ -551,7 +552,7 @@ class Model:
 
       img_filter2, axes_filter2 = plt.subplots(nrows = nb_width_filter2, ncols = nb_height_filter2)
       gs1_filter2 = gridspec.GridSpec(nb_height_filter2, nb_width_filter2)
-      print('   the first filter...')
+      print('   the second filter...')
       for i in range(self.nf[1]):
         ax1_filter2 = plt.subplot(gs1_filter2[i])
         ax1_filter2.axis('off')
