@@ -705,7 +705,7 @@ class Model:
       saver = tf.train.Saver()
       print('   variable initialization ...')
 
-      restore_weigths == 'N'
+      restore_weigths = str('N')
 
       if restore_weigths == 'y':
         file_to_restore = input("\nName of the file to restore (Directory : " + 
