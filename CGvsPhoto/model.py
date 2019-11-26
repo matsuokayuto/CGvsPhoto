@@ -676,7 +676,8 @@ class Model:
     self.nb_train_batch = nb_train_batch
     self.validation_frequency = validation_frequency
     
-    run_name = print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
