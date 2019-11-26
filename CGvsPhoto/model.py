@@ -677,7 +677,7 @@ class Model:
     self.validation_frequency = validation_frequency
     
     print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
-    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    run_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
@@ -1067,7 +1067,9 @@ class Model:
     valid_decision_rule = ['majority_vote', 'weighted_vote']
     if decision_rule not in valid_decision_rule:
       raise NameError(decision_rule + ' is not a valid decision rule.')
-    test_name = input("   Choose a name for the test : ")
+    
+    test_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    
     if(save_images):
       if not os.path.exists(self.dir_visualization + test_name):
         os.mkdir(self.dir_visualization + test_name)
@@ -1083,8 +1085,8 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      file_to_restore = input("\nName of the file to restore (Directory : " + 
-                              self.dir_ckpt + ') : ')
+      print('  pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b' + str(self.nb_train_batch) + '.ckpt')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b' + str(self.nb_train_batch) + '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(test_data_path, subimage_size = self.image_size, only_green = only_green)
