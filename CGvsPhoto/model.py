@@ -515,7 +515,8 @@ class Model:
     :type run_name: str
     :type show_filters: bool
     """
-    if show_filters: 
+    if show_filters:
+    if i == 0 or i == int(self.nb_train_batch/self.validation_frequency)
       
     # first filter
     
@@ -654,7 +655,7 @@ class Model:
 
 
   def train(self, nb_train_batch, nb_test_batch, 
-            nb_validation_batch, validation_frequency = 100, show_filters = False):
+            nb_validation_batch, validation_frequency = 10, show_filters = False):
     """Trains the model on the selected database training set.
       
     Trains a blank single-image classifer (or initialized with some pre-trained weights). 
@@ -673,7 +674,13 @@ class Model:
     :type validation_frequency: int
     :type show_filters: bool
     """
-    run_name = input("   Choose a name for the run : ")
+    self.nb_train_batch = nb_train_batch
+    self.validation_frequency = validation_frequency
+    
+    print('   Creating layer 1 - Shape : ' + str(self.remove_filter_size) + 'x' + 
+              str(self.remove_filter_size) + 'x' + str(self.nb_channels) + 'x' + str(nf[0]))
+    
+    run_name = print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
@@ -701,7 +708,7 @@ class Model:
       saver = tf.train.Saver()
       print('   variable initialization ...')
 
-      restore_weigths = input("\nRestore weight from previous session ? (y/N) : ")
+      restore_weigths == 'N'
 
       if restore_weigths == 'y':
         file_to_restore = input("\nName of the file to restore (Directory : " + 
