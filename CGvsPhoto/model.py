@@ -516,7 +516,7 @@ class Model:
     :type show_filters: bool
     """
     if show_filters:
-    if i == 0 or i == int(self.nb_train_batch/self.validation_frequency)
+    if i == 0 or i == int(self.nb_train_batch/self.validation_frequency):
       
     # first filter
     
