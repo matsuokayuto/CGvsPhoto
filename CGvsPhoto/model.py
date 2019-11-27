@@ -778,7 +778,7 @@ class Model:
               print('   Time last 100 batchs : ', time.strftime("%H:%M:%S",time.gmtime(time_elapsed)))
               remaining_time = time_elapsed * int((nb_train_batch - i)/100)
               print('   Remaining time : ', time.strftime("%H:%M:%S",time.gmtime(remaining_time)))
-            batch_clock = time.time
+            batch_clock = time.time()
             
       # final training
       
