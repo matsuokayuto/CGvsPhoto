@@ -515,10 +515,12 @@ class Model:
     :type run_name: str
     :type show_filters: bool
     """
-    if show_filters and (it == 0 or it == int(self.nb_train_batch)):
+    if show_filters and it%self.nb_train_batch == 0:
       
     # first filter
     
+      time_filter1_1 = time.time()
+       
       nb_height_filter1 = 4
       nb_width_filter1 = int(self.nf[0]/nb_height_filter1)
 
@@ -543,9 +545,16 @@ class Model:
       cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter1)
       cbar_filter1.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
       plt.show(img_filter1)
-      plt.close() 
+      plt.close()
+      
+      time_filter1_2 = time.time()
+      elapsed_time = time_filter1_2-time_filter1_1
+      print(f"フィルタ1経過時間：{elapsed_time}")
+      
       
     # second filter
+    
+      time_filter2_1 = time.time()
     
       nb_height_filter2 = 8
       nb_width_filter2 = int(self.nf[1]/nb_height_filter2)
@@ -572,8 +581,10 @@ class Model:
       cbar_filter2.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
       plt.show(img_filter2)
       plt.close() 
-        
-    
+      
+      time_filter2_2 = time.time()
+      elapsed_time = time_filter2_2-time_filter2_1
+      print(f"フィルタ2経過時間：{elapsed_time}")
 
     if plot_histograms and self.feature_extractor != 'Hist':
       print("Can't plot the histograms, feature extractor is 'Stats'...")
