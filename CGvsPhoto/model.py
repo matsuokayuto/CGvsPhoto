@@ -778,14 +778,87 @@ class Model:
               print('   Time last 100 batchs : ', time.strftime("%H:%M:%S",time.gmtime(time_elapsed)))
               remaining_time = time_elapsed * int((nb_train_batch - i)/100)
               print('   Remaining time : ', time.strftime("%H:%M:%S",time.gmtime(remaining_time)))
-            batch_clock = time.time()
+            batch_clock = time.time
+            
+    # final training
       
-      path_save_batch = path_save + str(nb_train_batch) + ".ckpt"
-      print('   saving weights in file : ' + path_save_batch)
-      saver.save(sess, path_save_batch)
-      print('   OK')
-      print('   saving validation accuracy...')
-      file = open(acc_name, 'w', newline='')
+    if show_filters:
+      
+    # first filter
+    
+      time_filter1_1 = time.time()
+       
+      nb_height_filter1 = 4
+      nb_width_filter1 = int(self.nf[0]/nb_height_filter1)
+
+      img_filter1, axes_filter1 = plt.subplots(nrows = nb_width_filter1, ncols = nb_height_filter1)
+      gs1_filter1 = gridspec.GridSpec(nb_height_filter1, nb_width_filter1)
+      print('   the first filter...')
+      for i in range(self.nf[0]):
+        ax1_filter1 = plt.subplot(gs1_filter1[i])
+        ax1_filter1.axis('off')
+        im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+
+        ax1_filter1.set_xticklabels([])
+        ax1_filter1.set_yticklabels([]) 
+        ax1_filter1.autoscale(False)
+        # axes.get_yaxis().set_ticks([])
+        # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
+        # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
+        ax1_filter1.set_title(str(i + 1), fontsize = 12.0)    
+
+      img_filter1.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
+      cbar_ax_filter1 = img_filter1.add_axes([0.75, 0.15, 0.03, 0.7])
+      cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter1)
+      cbar_filter1.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      plt.show(img_filter1)
+      plt.close()
+      
+      time_filter1_2 = time.time()
+      elapsed_time = time_filter1_2-time_filter1_1
+      print(f"フィルタ1経過時間：{elapsed_time}")
+      
+      
+    # second filter
+    
+      time_filter2_1 = time.time()
+    
+      nb_height_filter2 = 8
+      nb_width_filter2 = int(self.nf[1]/nb_height_filter2)
+
+      img_filter2, axes_filter2 = plt.subplots(nrows = nb_width_filter2, ncols = nb_height_filter2)
+      gs1_filter2 = gridspec.GridSpec(nb_height_filter2, nb_width_filter2)
+      print('   the second filter...')
+      for i in range(self.nf[1]):
+        ax1_filter2 = plt.subplot(gs1_filter2[i])
+        ax1_filter2.axis('off')
+        im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+
+        ax1_filter2.set_xticklabels([])
+        ax1_filter2.set_yticklabels([]) 
+        ax1_filter2.autoscale(False)
+        # axes.get_yaxis().set_ticks([])
+        # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
+        # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
+        ax1_filter2.set_title(str(i + 1), fontsize = 12.0)    
+
+      img_filter2.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
+      cbar_ax_filter2 = img_filter2.add_axes([0.75, 0.15, 0.03, 0.7])
+      cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter2)
+      cbar_filter2.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      plt.show(img_filter2)
+      plt.close() 
+      
+      time_filter2_2 = time.time()
+      elapsed_time = time_filter2_2-time_filter2_1
+      print(f"フィルタ2経過時間：{elapsed_time}")
+        
+    path_save_batch = path_save + str(nb_train_batch) + ".ckpt"
+    print('   saving weights in file : ' + path_save_batch)
+    saver.save(sess, path_save_batch)
+    print('   OK')
+    print('   saving validation accuracy...')
+    file = open(acc_name, 'w', newline='')
 
       try:
           writer = csv.writer(file)
