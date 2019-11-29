@@ -515,7 +515,9 @@ class Model:
     :type run_name: str
     :type show_filters: bool
     """
-    if show_filters and it%self.nb_train_batch == 0:
+    filterout = int(50000/self.batch_size)
+    
+    if show_filters and it%filterout == 0:
       
     # first filter
     
