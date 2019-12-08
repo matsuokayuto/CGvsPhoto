@@ -233,7 +233,7 @@ class Model:
     
     # read the configuration file
     conf = configparser.ConfigParser()
-    conf.read('/home/secure/CGvsPhoto/Textures/config.ini')
+    conf.read('/home/secure/CGvsPhoto2/Textures/config.ini')
 
     if config not in conf:
       raise ValueError(config + ' is not in the config.ini file... Please create the corresponding section')
@@ -1187,7 +1187,7 @@ class Model:
     print(0.5 + np.array(scores)/np.max(np.array(scores)))
     print(thresholds)
 
-    filename = '/home/secure/CGvsPhoto/Documents/ROC/' + test_name + '.pkl'
+    filename = '/home/secure/CGvsPhoto2/Documents/ROC/' + test_name + '.pkl'
     print('Saving tpr and fpr in file : ' + filename)
     pickle.dump((fpr,tpr), open(filename, 'wb'))
 
