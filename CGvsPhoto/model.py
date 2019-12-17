@@ -691,8 +691,8 @@ class Model:
     self.validation_frequency = validation_frequency
     self.keep_neuron = keep_neuron
     
-    print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
-    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
+    print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
+    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
@@ -1159,7 +1159,7 @@ class Model:
     if decision_rule not in valid_decision_rule:
       raise NameError(decision_rule + ' is not a valid decision rule.')
     
-    test_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
+    test_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
     
     if(save_images):
       if not os.path.exists(self.dir_visualization + test_name):
@@ -1176,8 +1176,8 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b' + str(self.nb_train_batch) + '.ckpt')
-      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b' + str(self.nb_train_batch) + '.ckpt')
+      print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b' + str(self.nb_train_batch) + '.ckpt')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b' + str(self.nb_train_batch) + '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(test_data_path, subimage_size = self.image_size, only_green = only_green)
