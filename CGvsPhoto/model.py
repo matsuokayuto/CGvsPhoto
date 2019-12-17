@@ -208,7 +208,7 @@ class Model:
   def __init__(self, database_path, image_size, config = 'Personal', filters = [32, 64],
               feature_extractor = 'Stats', remove_context = False, 
               nbins = 10, remove_filter_size = 3, batch_size = 50, 
-              using_GPU = False, only_green = True):
+              using_GPU = False, only_green = True, lr = 0.0001):
     """Defines a model for single-image classification
 
     :param database_path: Absolute path to the default patch database (training, validation and testings are performed on this database)
@@ -263,6 +263,7 @@ class Model:
     self.remove_context = remove_context
     self.remove_filter_size = remove_filter_size
     self.only_green = only_green
+    self.lr = lr
 
     # getting the database
     self.import_database()
@@ -463,7 +464,7 @@ class Model:
       tf.summary.scalar('cross_entropy', cross_entropy_mean)
 
       with tf.name_scope('train'):
-        train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy_mean)
+        train_step = tf.train.AdamOptimizer(self.lr).minimize(cross_entropy_mean)
 
       # with tf.name_scope('enforce_constraints'):
       if self.remove_context:
@@ -667,7 +668,7 @@ class Model:
 
 
   def train(self, nb_train_batch, nb_test_batch, 
-            nb_validation_batch, validation_frequency = 10, show_filters = False):
+            nb_validation_batch, validation_frequency = 10, show_filters = False, keep_neuron = 0.65):
     """Trains the model on the selected database training set.
       
     Trains a blank single-image classifer (or initialized with some pre-trained weights). 
@@ -688,9 +689,10 @@ class Model:
     """
     self.nb_train_batch = nb_train_batch
     self.validation_frequency = validation_frequency
+    self.keep_neuron = keep_neuron
     
-    print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
-    run_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
+    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
@@ -732,6 +734,7 @@ class Model:
       start_clock = time.clock()
       start_time = time.time()
       validation_accuracy = []
+      batch_div = int(nb_train_batch/5)
       for i in range(nb_train_batch):
 
           # enforce constraints on first layer : 
@@ -764,17 +767,19 @@ class Model:
 
 
           batch = self.data.get_next_train_batch(self.batch_size, False, True, True)
-          feed_dict = {self.x: batch[0], self.y_: batch[1], self.keep_prob: 0.65}
+          feed_dict = {self.x: batch[0], self.y_: batch[1], self.keep_prob: self.keep_neuron}
           summary, _ = sess.run([merged, self.train_step], feed_dict = feed_dict)
           train_writer.add_summary(summary, i)
 
-          # Saving weights every 100 batches
-          if i%100 == 0:
-
+          if i%batch_div == 0:
             path_save_batch = path_save + str(i) + ".ckpt"
             print('   saving weights in file : ' + path_save_batch)
             saver.save(sess, path_save_batch)
             print('   OK')
+        
+          # Saving weights every 100 batches
+          if i%100 == 0:
+
             if batch_clock is not None: 
               time_elapsed = (time.time()-batch_clock)
               print('   Time last 100 batchs : ', time.strftime("%H:%M:%S",time.gmtime(time_elapsed)))
@@ -1154,7 +1159,7 @@ class Model:
     if decision_rule not in valid_decision_rule:
       raise NameError(decision_rule + ' is not a valid decision rule.')
     
-    test_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b')
+    test_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b')
     
     if(save_images):
       if not os.path.exists(self.dir_visualization + test_name):
@@ -1171,8 +1176,8 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      print('  pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b' + str(self.nb_train_batch) + '.ckpt')
-      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_' + str(self.batch_size) + 'b' + str(self.nb_train_batch) + '.ckpt')
+      print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b' + str(self.nb_train_batch) '.ckpt')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.neuron) + 'b' + str(self.nb_train_batch) '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(test_data_path, subimage_size = self.image_size, only_green = only_green)
