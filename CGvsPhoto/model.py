@@ -516,7 +516,7 @@ class Model:
     :type run_name: str
     :type show_filters: bool
     """
-    filterout = int(50000/self.batch_size)
+    filterout = int(250000/self.batch_size)
     
     if show_filters and it%filterout == 0:
       
