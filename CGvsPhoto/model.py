@@ -692,7 +692,7 @@ class Model:
     self.keep_neuron = keep_neuron
     
     print('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
-    run_name = str('   pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
+    run_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
 
