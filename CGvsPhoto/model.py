@@ -918,8 +918,8 @@ class Model:
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,nb_train_accuracy,int(nb_train_batch/10), label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,nb_validation_accuracy,int(nb_train_batch/10), label="validation")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,train_accuracy,int(nb_train_batch/10), label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,validation_accuracy,int(nb_train_batch/10), label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
         plt.ylabel("Validation accuracy")
