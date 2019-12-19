@@ -485,6 +485,7 @@ class Model:
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
         tf.summary.scalar('accuracy', accuracy)
 
+      self.cross_entropy_mean = cross_entropy_mean
       self.accuracy = accuracy
 
     self.graph = graph
@@ -533,7 +534,7 @@ class Model:
       for i in range(self.nf[0]):
         ax1_filter1 = plt.subplot(gs1_filter1[i])
         ax1_filter1.axis('off')
-        im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+        im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
 
         ax1_filter1.set_xticklabels([])
         ax1_filter1.set_yticklabels([]) 
@@ -545,8 +546,8 @@ class Model:
 
       img_filter1.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
       cbar_ax_filter1 = img_filter1.add_axes([0.75, 0.15, 0.03, 0.7])
-      cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter1)
-      cbar_filter1.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter1)
+      cbar_filter1.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
       plt.show(img_filter1)
       plt.close()
       
@@ -568,7 +569,7 @@ class Model:
       for i in range(self.nf[1]):
         ax1_filter2 = plt.subplot(gs1_filter2[i])
         ax1_filter2.axis('off')
-        im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+        im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
 
         ax1_filter2.set_xticklabels([])
         ax1_filter2.set_yticklabels([]) 
@@ -580,8 +581,8 @@ class Model:
 
       img_filter2.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
       cbar_ax_filter2 = img_filter2.add_axes([0.75, 0.15, 0.03, 0.7])
-      cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter2)
-      cbar_filter2.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+      cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter2)
+      cbar_filter2.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
       plt.show(img_filter2)
       plt.close() 
       
@@ -592,7 +593,8 @@ class Model:
     if plot_histograms and self.feature_extractor != 'Hist':
       print("Can't plot the histograms, feature extractor is 'Stats'...")
 
-    validation_batch_size = batch_size 
+    validation_batch_size = batch_size
+    validation_cross_entropy_mean = 0
     validation_accuracy = 0
     # validation_auc = 0
     self.data.validation_iterator = 0
@@ -611,6 +613,7 @@ class Model:
       feed_dict = {self.x: batch_validation[0], 
                    self.y_: batch_validation[1], 
                    self.keep_prob: 1.0}
+      validation_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
       validation_accuracy += self.accuracy.eval(feed_dict)
 
       
@@ -661,9 +664,11 @@ class Model:
       plt.close()
 
 
-
+    validation_cross_entropy_mean /= nb_iterations
     validation_accuracy /= nb_iterations
-    print("     step %d, training accuracy %g (%d validations tests)"%(it, validation_accuracy, validation_batch_size*nb_iterations))
+    validation_cross_entropy_mean_round = round(validation_cross_entropy_mean,4)
+    print("     step %d, training accuracy %g, loss %g, (%d validations tests)"%(it, validation_accuracy, validation_cross_entropy_mean_round, validation_batch_size*nb_iterations))
+    return(validation_cross_entropy_mean)
     return(validation_accuracy)
 
 
@@ -733,6 +738,7 @@ class Model:
       print('   train ...')
       start_clock = time.clock()
       start_time = time.time()
+      validation_cross_entropy_mean = []
       validation_accuracy = []
       batch_div = int(nb_train_batch/5)
       for i in range(nb_train_batch):
@@ -760,6 +766,7 @@ class Model:
                                       plot_histograms = plot_histograms,
                                       run_name = run_name,
                                       show_filters = show_filters)
+              validation_cross_entropy_mean.append(v)
               validation_accuracy.append(v)
               
           # regular training
@@ -770,6 +777,11 @@ class Model:
           feed_dict = {self.x: batch[0], self.y_: batch[1], self.keep_prob: self.keep_neuron}
           summary, _ = sess.run([merged, self.train_step], feed_dict = feed_dict)
           train_writer.add_summary(summary, i)
+            
+          if i%100 == 0:
+            train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.loss], feed_dict={self.x: batch[0], self.y_: batch[1], keep_prob: 1.0})
+            train_cross_entropy_mean_round = round(train_cross_entropy_mean,4)
+            print("   step %d, training accuracy %g, loss %g"%(i, train_accuracy, train_cross_entropy_mean))
 
           if i%batch_div == 0:
             path_save_batch = path_save + str(i) + ".ckpt"
@@ -804,7 +816,7 @@ class Model:
         for i in range(self.nf[0]):
           ax1_filter1 = plt.subplot(gs1_filter1[i])
           ax1_filter1.axis('off')
-          im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+          im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
 
           ax1_filter1.set_xticklabels([])
           ax1_filter1.set_yticklabels([]) 
@@ -816,8 +828,8 @@ class Model:
 
         img_filter1.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
         cbar_ax_filter1 = img_filter1.add_axes([0.75, 0.15, 0.03, 0.7])
-        cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter1)
-        cbar_filter1.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+        cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter1)
+        cbar_filter1.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
         plt.show(img_filter1)
         plt.close()
       
@@ -839,7 +851,7 @@ class Model:
         for i in range(self.nf[1]):
           ax1_filter2 = plt.subplot(gs1_filter2[i])
           ax1_filter2.axis('off')
-          im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.5, vmax = 1.5)
+          im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
 
           ax1_filter2.set_xticklabels([])
           ax1_filter2.set_yticklabels([]) 
@@ -851,8 +863,8 @@ class Model:
 
         img_filter2.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
         cbar_ax_filter2 = img_filter2.add_axes([0.75, 0.15, 0.03, 0.7])
-        cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.5, 0, 1.5], cax=cbar_ax_filter2)
-        cbar_filter2.ax.set_yticklabels(['< -1.5', '0', '> 1.5'])
+        cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter2)
+        cbar_filter2.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
         plt.show(img_filter2)
         plt.close() 
       
@@ -909,10 +921,21 @@ class Model:
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_accuracy)
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_accuracy, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_accuracy, label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
         plt.ylabel("Validation accuracy")
+        plt.show()
+        plt.close()
+      
+      if nb_train_batch > validation_frequency:
+        plt.figure()
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_cross_entropy_mean, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_cross_entropy_mean, label="validation")
+        plt.title("crossentropymean during training")
+        plt.xlabel("Training batch")
+        plt.ylabel("crossentropymean")
         plt.show()
         plt.close()
 
