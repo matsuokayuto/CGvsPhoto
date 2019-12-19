@@ -936,6 +936,7 @@ class Model:
         plt.show()
         plt.close()
 
+
     # done
     print("   computation time (cpu) :",time.strftime("%H:%M:%S", time.gmtime(time.clock()-start_clock)))
     print("   computation time (real):",time.strftime("%H:%M:%S", time.gmtime(time.time()-start_time)))
