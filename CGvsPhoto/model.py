@@ -789,7 +789,7 @@ class Model:
             self.train_cross_entropy_mean = train_cross_entropy_mean1
             train_cross_entropy_mean.append(self.train_cross_entropy_mean)
             train_accuracy.append(self.train_accuracy)
-            print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy, train_cross_entropy_mean))
+            print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean1))
             
 
           if i%batch_div == 0:
