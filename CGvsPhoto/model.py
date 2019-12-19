@@ -917,8 +917,8 @@ class Model:
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        #plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_accuracy, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_accuracy, label="validation")
+        #plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), train_accuracy, label="train")
+        plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), validation_accuracy, label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
         plt.ylabel("Validation accuracy")
@@ -927,8 +927,8 @@ class Model:
       
       if nb_train_batch > validation_frequency:
         plt.figure()
-        #plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_cross_entropy_mean, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_cross_entropy_mean, label="validation")
+        #plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), train_cross_entropy_mean, label="train")
+        plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), validation_cross_entropy_mean, label="validation")
         plt.title("crossentropymean during training")
         plt.xlabel("Training batch")
         plt.ylabel("crossentropymean")
