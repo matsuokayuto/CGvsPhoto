@@ -779,7 +779,7 @@ class Model:
           train_writer.add_summary(summary, i)
             
           if i%100 == 0:
-            train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], keep_prob: 1.0})
+            train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean,4)
             print("   step %d, training accuracy %g, loss %g"%(i, train_accuracy, train_cross_entropy_mean))
 
