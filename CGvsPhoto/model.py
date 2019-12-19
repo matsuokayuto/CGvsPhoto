@@ -742,6 +742,8 @@ class Model:
       start_time = time.time()
       validation_cross_entropy_mean = []
       validation_accuracy = []
+      validation_cross_entropy_mean = []
+      train_accuracy = []
       batch_div = int(nb_train_batch/4)
       for i in range(nb_train_batch+1):
 
@@ -783,7 +785,12 @@ class Model:
           if i%100 == 0:
             train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean,4)
+            self.train_accuracy = train_accuracy
+            self.train_cross_entropy_mean = train_cross_entropy_mean
+            train_cross_entropy_mean.append(self.train_cross_entropy_mean)
+            train_accuracy.append(self.train_accuracy)
             print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy, train_cross_entropy_mean))
+            
 
           if i%batch_div == 0:
             path_save_batch = path_save + str(i) + ".ckpt"
@@ -919,7 +926,7 @@ class Model:
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        #plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), train_accuracy, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/100)+1), train_accuracy, label="train")
         plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)+1), validation_accuracy, label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
@@ -929,7 +936,7 @@ class Model:
       
       if nb_train_batch > validation_frequency:
         plt.figure()
-        #plt.plot(np.linspace(0,nb_train_batch+1,int(nb_train_batch/10)), train_cross_entropy_mean, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/100)+1), train_cross_entropy_mean, label="train")
         plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)+1), validation_cross_entropy_mean, label="validation")
         plt.title("crossentropymean during training")
         plt.xlabel("Training batch")
