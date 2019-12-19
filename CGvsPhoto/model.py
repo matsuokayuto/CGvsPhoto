@@ -846,7 +846,6 @@ class Model:
         elapsed_time = time_filter1_2-time_filter1_1
         print(f"フィルタ1経過時間：{elapsed_time}")
       
-      
       # second filter
     
         time_filter2_1 = time.time()
