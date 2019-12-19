@@ -666,6 +666,8 @@ class Model:
     
     validation_accuracy /= nb_iterations
     validation_cross_entropy_mean /= nb_iterations
+    self.validation_accuracy = validation_accuracy
+    self.validation_cross_entropy_mean = validation_cross_entropy_mean
     validation_cross_entropy_mean_round = round(validation_cross_entropy_mean,4)
     print("     step %d, training accuracy %g, loss %g, (%d validations tests)"%(it, validation_accuracy, validation_cross_entropy_mean_round, validation_batch_size*nb_iterations))
     return(validation_cross_entropy_mean)
@@ -766,8 +768,8 @@ class Model:
                                       plot_histograms = plot_histograms,
                                       run_name = run_name,
                                       show_filters = show_filters)
-              validation_cross_entropy_mean.append(v)
-              validation_accuracy.append(v)
+              validation_cross_entropy_mean.append(self.validation_cross_entropy_mean)
+              validation_accuracy.append(self.validation_accuracy)
               
           # regular training
 
