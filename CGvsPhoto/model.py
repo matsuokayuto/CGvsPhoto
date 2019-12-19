@@ -613,7 +613,9 @@ class Model:
       feed_dict = {self.x: batch_validation[0], 
                    self.y_: batch_validation[1], 
                    self.keep_prob: 1.0}
-      validation_accuracy, validation_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict=feed_dict)
+      validation_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
+      validation_accuracy += self.accuracy.eval(feed_dict)
+      
 
       
       if plot_histograms and self.feature_extractor == 'Hist':
@@ -661,8 +663,9 @@ class Model:
         fig.suptitle("Mean histogram for Real", fontsize=14)
       plt.show()
       plt.close()
-
-        
+    
+    validation_accuracy /= nb_iterations
+    validation_cross_entropy_mean /= nb_iterations
     validation_cross_entropy_mean_round = round(validation_cross_entropy_mean,4)
     print("     step %d, training accuracy %g, loss %g, (%d validations tests)"%(it, validation_accuracy, validation_cross_entropy_mean_round, validation_batch_size*nb_iterations))
     return(validation_cross_entropy_mean)
