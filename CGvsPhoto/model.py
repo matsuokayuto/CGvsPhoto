@@ -872,10 +872,6 @@ class Model:
         elapsed_time = time_filter2_2-time_filter2_1
         print(f"フィルタ2経過時間：{elapsed_time}")
        
-      path_save_batch = path_save + str(nb_train_batch) + ".ckpt"
-      print('   saving weights in file : ' + path_save_batch)
-      saver.save(sess, path_save_batch)
-      print('   OK')
       print('   saving validation accuracy...')
       file = open(acc_name, 'w', newline='')
 
@@ -912,6 +908,9 @@ class Model:
       print("   test accuracy %g"%test_accuracy)
 
       fpr, tpr, _ = roc_curve(y_test, scores)
+    
+      filename = '/home/secure/CGvsPhoto2/Documents/ROC/' + run_name + '.pkl'
+      print('Saving tpr and fpr in file : ' + filename)
       pickle.dump((fpr, tpr), open(filename, 'wb'))
 
       # test_auc /= (nb_iterations - 1)
