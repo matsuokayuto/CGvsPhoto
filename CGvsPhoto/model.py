@@ -613,8 +613,7 @@ class Model:
       feed_dict = {self.x: batch_validation[0], 
                    self.y_: batch_validation[1], 
                    self.keep_prob: 1.0}
-      validation_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
-      validation_accuracy += self.accuracy.eval(feed_dict)
+      validation_accuracy, validation_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict=feed_dict)
 
       
       if plot_histograms and self.feature_extractor == 'Hist':
@@ -663,9 +662,7 @@ class Model:
       plt.show()
       plt.close()
 
-
-    validation_cross_entropy_mean /= nb_iterations
-    validation_accuracy /= nb_iterations
+        
     validation_cross_entropy_mean_round = round(validation_cross_entropy_mean,4)
     print("     step %d, training accuracy %g, loss %g, (%d validations tests)"%(it, validation_accuracy, validation_cross_entropy_mean_round, validation_batch_size*nb_iterations))
     return(validation_cross_entropy_mean)
@@ -779,7 +776,7 @@ class Model:
           train_writer.add_summary(summary, i)
             
           if i%100 == 0:
-            train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.loss], feed_dict={self.x: batch[0], self.y_: batch[1], keep_prob: 1.0})
+            train_accuracy, train_cross_entropy_mean = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean,4)
             print("   step %d, training accuracy %g, loss %g"%(i, train_accuracy, train_cross_entropy_mean))
 
