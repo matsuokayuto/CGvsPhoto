@@ -742,7 +742,7 @@ class Model:
       start_time = time.time()
       validation_cross_entropy_mean = []
       validation_accuracy = []
-      validation_cross_entropy_mean = []
+      train_cross_entropy_mean = []
       train_accuracy = []
       batch_div = int(nb_train_batch/4)
       for i in range(nb_train_batch+1):
