@@ -741,7 +741,7 @@ class Model:
       validation_cross_entropy_mean = []
       validation_accuracy = []
       batch_div = int(nb_train_batch/5)
-      for i in range(nb_train_batch):
+      for i in range(nb_train_batch+1):
 
           # enforce constraints on first layer : 
           if self.remove_context: 
@@ -912,17 +912,14 @@ class Model:
       print("   test accuracy %g"%test_accuracy)
 
       fpr, tpr, _ = roc_curve(y_test, scores)
-
-      filename = '/home/secure/CGvsPhoto2/Documents/ROC/' + run_name + '.pkl'
-      print('Saving tpr and fpr in file : ' + filename)
       pickle.dump((fpr, tpr), open(filename, 'wb'))
 
       # test_auc /= (nb_iterations - 1)
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_accuracy, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_accuracy, label="validation")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,nb_train_accuracy,int(nb_train_batch/10), label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,nb_validation_accuracy,int(nb_train_batch/10), label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
         plt.ylabel("Validation accuracy")
@@ -931,8 +928,8 @@ class Model:
       
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), train_cross_entropy_mean, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), validation_cross_entropy_mean, label="validation")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,train_cross_entropy_mean,int(nb_train_batch/10), label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)), np.linspace(0,validation_cross_entropy_mean,int(nb_train_batch/10), label="validation")
         plt.title("crossentropymean during training")
         plt.xlabel("Training batch")
         plt.ylabel("crossentropymean")
