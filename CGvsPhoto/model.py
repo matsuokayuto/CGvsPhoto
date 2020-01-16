@@ -1185,8 +1185,8 @@ class Model:
     """
     # define
     
-    train_batch = 1000000/self.batch_size
-    iteration = train_batch*0.75
+    train_batch = int(1000000/self.batch_size)
+    iteration = int(train_batch*0.75)
     
     
     valid_decision_rule = ['majority_vote', 'weighted_vote']
