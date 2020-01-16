@@ -1155,7 +1155,7 @@ class Model:
 
 
   def test_total_images(self, test_data_path, nb_images, 
-                        minibatch_size = 25, keep = 0.65, decision_rule = 'majority_vote',
+                        minibatch_size = 25, learning = 1e-4, keep = 0.65, decision_rule = 'majority_vote',
                         show_images = False,
                         save_images = False,
                         only_green = True, other_clf = False): 
@@ -1193,7 +1193,7 @@ class Model:
     if decision_rule not in valid_decision_rule:
       raise NameError(decision_rule + ' is not a valid decision rule.')
     
-    test_name = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(keep) + 'b')
+    test_name = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b')
     
     if(save_images):
       if not os.path.exists(self.dir_visualization + test_name):
@@ -1210,8 +1210,8 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      print('   pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
-      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
+      print('   pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(test_data_path, subimage_size = self.image_size, only_green = only_green)
