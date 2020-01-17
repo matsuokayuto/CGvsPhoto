@@ -745,7 +745,7 @@ class Model:
       train_cross_entropy_mean = []
       train_accuracy = []
       batch_div = int(nb_train_batch/3)
-      for i in range(nb_train_batch):
+      for i in range(nb_train_batch+1):
 
           # enforce constraints on first layer : 
           if self.remove_context: 
@@ -897,7 +897,7 @@ class Model:
     # final test
       print('   final test ...')
       test_accuracy = 0
-      test_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
+      test_cross_entropy_mean = 0
       # test_auc = 0
       nb_iterations = nb_test_batch
       self.data.test_iterator = 0
