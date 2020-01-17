@@ -744,8 +744,8 @@ class Model:
       validation_accuracy = []
       train_cross_entropy_mean = []
       train_accuracy = []
-      batch_div = int(nb_train_batch/4)
-      for i in range(nb_train_batch+1):
+      batch_div = int(nb_train_batch/3)
+      for i in range(nb_train_batch):
 
           # enforce constraints on first layer : 
           if self.remove_context: 
@@ -897,6 +897,7 @@ class Model:
     # final test
       print('   final test ...')
       test_accuracy = 0
+      test_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
       # test_auc = 0
       nb_iterations = nb_test_batch
       self.data.test_iterator = 0
@@ -906,6 +907,7 @@ class Model:
           batch_test = self.data.get_batch_test(self.batch_size, False, True, True)
           feed_dict = {self.x:batch_test[0], self.y_: batch_test[1], self.keep_prob: 1.0}
           test_accuracy += self.accuracy.eval(feed_dict)
+          test_cross_entropy_mean += self.cross_entropy_mean.eval(feed_dict)
           # print(scores[k*self.batch_size:(k+1)*self.batch_size].shape)
           scores[k*self.batch_size:(k+1)*self.batch_size] = normalize(self.y_conv.eval(feed_dict))[:,1]
           y_test[k*self.batch_size:(k+1)*self.batch_size] = batch_test[1][:,1]
@@ -913,7 +915,9 @@ class Model:
 
                 
       test_accuracy /= nb_iterations
-      print("   test accuracy %g"%test_accuracy)
+      test_cross_entropy_mean /= nb_iterations
+      print("   test accuracy %g, loss %g"%(test_accuracy, test_cross_entropy_mean))
+      
 
       fpr, tpr, _ = roc_curve(y_test, scores)
     
