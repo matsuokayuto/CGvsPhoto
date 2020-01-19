@@ -781,14 +781,15 @@ class Model:
           summary, _ = sess.run([merged, self.train_step], feed_dict = feed_dict)
           train_writer.add_summary(summary, i)
             
-          if i%100 == 0:
+          if i%train_frequency == 0:
             train_accuracy1, train_cross_entropy_mean1 = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean1,4)
             self.train_accuracy = train_accuracy1
             self.train_cross_entropy_mean = train_cross_entropy_mean1
             train_cross_entropy_mean.append(self.train_cross_entropy_mean)
             train_accuracy.append(self.train_accuracy)
-            print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean_round))
+            if i%100 == 0:
+              print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean_round))
             
 
           if i != 0 and batch_div != 0 and i%batch_div == 0:
