@@ -781,7 +781,7 @@ class Model:
           summary, _ = sess.run([merged, self.train_step], feed_dict = feed_dict)
           train_writer.add_summary(summary, i)
             
-          if i%train_frequency == 0:
+          if i%100 == 0:
             train_accuracy1, train_cross_entropy_mean1 = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean1,4)
             self.train_accuracy = train_accuracy1
@@ -791,7 +791,7 @@ class Model:
             print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean_round))
             
 
-          if i%batch_div == 0:
+          if i != 0 and batch_div != 0 and i%batch_div == 0:
             path_save_batch = path_save + str(i) + ".ckpt"
             print('   saving weights in file : ' + path_save_batch)
             saver.save(sess, path_save_batch)
