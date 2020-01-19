@@ -675,7 +675,8 @@ class Model:
 
 
   def train(self, nb_train_batch, nb_test_batch, 
-            nb_validation_batch, validation_frequency = 10, show_filters = False, keep_neuron = 0.65):
+            nb_validation_batch, validation_frequency = 10, train_frequency = 100, 
+            checkpoint = 3, keep_neuron = 0.65, restore_weigths = False, show_filters = False):
     """Trains the model on the selected database training set.
       
     Trains a blank single-image classifer (or initialized with some pre-trained weights). 
@@ -726,10 +727,8 @@ class Model:
       tf.local_variables_initializer().run()
       saver = tf.train.Saver()
       print('   variable initialization ...')
-
-      restore_weigths = str('N')
-
-      if restore_weigths == 'y':
+    
+      if restore_weigths:
         file_to_restore = input("\nName of the file to restore (Directory : " + 
                                 self.dir_ckpt + ') : ')
         saver.restore(sess, self.dir_ckpt + file_to_restore)
@@ -744,7 +743,7 @@ class Model:
       validation_accuracy = []
       train_cross_entropy_mean = []
       train_accuracy = []
-      batch_div = int(nb_train_batch/3)
+      batch_div = int(nb_train_batch/checkpoint)
       for i in range(nb_train_batch+1):
 
           # enforce constraints on first layer : 
@@ -782,14 +781,14 @@ class Model:
           summary, _ = sess.run([merged, self.train_step], feed_dict = feed_dict)
           train_writer.add_summary(summary, i)
             
-          if i%100 == 0:
+          if i%train_frequency == 0:
             train_accuracy1, train_cross_entropy_mean1 = sess.run([self.accuracy,self.cross_entropy_mean], feed_dict={self.x: batch[0], self.y_: batch[1], self.keep_prob: 1.0})
             train_cross_entropy_mean_round = round(train_cross_entropy_mean1,4)
             self.train_accuracy = train_accuracy1
             self.train_cross_entropy_mean = train_cross_entropy_mean1
             train_cross_entropy_mean.append(self.train_cross_entropy_mean)
             train_accuracy.append(self.train_accuracy)
-            print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean1))
+            print("     step %d, training accuracy %g, loss %g"%(i, train_accuracy1, train_cross_entropy_mean_round))
             
 
           if i%batch_div == 0:
@@ -807,78 +806,6 @@ class Model:
               remaining_time = time_elapsed * int((nb_train_batch - i)/100)
               print('   Remaining time : ', time.strftime("%H:%M:%S",time.gmtime(remaining_time)))
             batch_clock = time.time()
-            
-      # final training
-      
-      if show_filters:
-      
-      # first filter
-    
-        time_filter1_1 = time.time()
-       
-        nb_height_filter1 = 4
-        nb_width_filter1 = int(self.nf[0]/nb_height_filter1)
-
-        img_filter1, axes_filter1 = plt.subplots(nrows = nb_width_filter1, ncols = nb_height_filter1)
-        gs1_filter1 = gridspec.GridSpec(nb_height_filter1, nb_width_filter1)
-        print('   the first filter...')
-        for i in range(self.nf[0]):
-          ax1_filter1 = plt.subplot(gs1_filter1[i])
-          ax1_filter1.axis('off')
-          im_filter1 = plt.imshow(self.W_conv1[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
-
-          ax1_filter1.set_xticklabels([])
-          ax1_filter1.set_yticklabels([]) 
-          ax1_filter1.autoscale(False)
-          # axes.get_yaxis().set_ticks([])
-          # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
-          # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
-          ax1_filter1.set_title(str(i + 1), fontsize = 12.0)    
-
-        img_filter1.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
-        cbar_ax_filter1 = img_filter1.add_axes([0.75, 0.15, 0.03, 0.7])
-        cbar_filter1 = img_filter1.colorbar(im_filter1, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter1)
-        cbar_filter1.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
-        plt.show(img_filter1)
-        plt.close()
-      
-        time_filter1_2 = time.time()
-        elapsed_time = time_filter1_2-time_filter1_1
-        print(f"フィルタ1経過時間：{elapsed_time}")
-      
-      # second filter
-    
-        time_filter2_1 = time.time()
-    
-        nb_height_filter2 = 8
-        nb_width_filter2 = int(self.nf[1]/nb_height_filter2)
-
-        img_filter2, axes_filter2 = plt.subplots(nrows = nb_width_filter2, ncols = nb_height_filter2)
-        gs1_filter2 = gridspec.GridSpec(nb_height_filter2, nb_width_filter2)
-        print('   the second filter...')
-        for i in range(self.nf[1]):
-          ax1_filter2 = plt.subplot(gs1_filter2[i])
-          ax1_filter2.axis('off')
-          im_filter2 = plt.imshow(self.W_conv2[:,:,0,i].eval(), cmap = 'jet', vmin = -1.0, vmax = 1.0)
-
-          ax1_filter2.set_xticklabels([])
-          ax1_filter2.set_yticklabels([]) 
-          ax1_filter2.autoscale(False)
-          # axes.get_yaxis().set_ticks([])
-          # plt.ylabel('Kernel ' + str(i), fontsize = 5.0)
-          # ax1.set_ylabel('Kernel ' + str(i), fontsize = 5.0)
-          ax1_filter2.set_title(str(i + 1), fontsize = 12.0)    
-
-        img_filter2.subplots_adjust(wspace = 0.1, hspace = 0.6, right = 0.7)
-        cbar_ax_filter2 = img_filter2.add_axes([0.75, 0.15, 0.03, 0.7])
-        cbar_filter2 = img_filter2.colorbar(im_filter2, ticks=[-1.0, 0, 1.0], cax=cbar_ax_filter2)
-        cbar_filter2.ax.set_yticklabels(['< -1.0', '0', '> 1.0'])
-        plt.show(img_filter2)
-        plt.close() 
-      
-        time_filter2_2 = time.time()
-        elapsed_time = time_filter2_2-time_filter2_1
-        print(f"フィルタ2経過時間：{elapsed_time}")
        
       print('   saving validation accuracy...')
       file = open(acc_name, 'w', newline='')
@@ -929,8 +856,8 @@ class Model:
       # print("   test AUC %g"%test_auc)
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/100)+1), train_accuracy, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)+1), validation_accuracy, label="validation")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/train_frequency)+1), train_accuracy, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/validation_frequency)+1), validation_accuracy, label="validation")
         plt.title("Validation accuracy during training")
         plt.xlabel("Training batch")
         plt.ylabel("Validation accuracy")
@@ -939,11 +866,11 @@ class Model:
       
       if nb_train_batch > validation_frequency:
         plt.figure()
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/100)+1), train_cross_entropy_mean, label="train")
-        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/10)+1), validation_cross_entropy_mean, label="validation")
-        plt.title("crossentropymean during training")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/train_frequency)+1), train_cross_entropy_mean, label="train")
+        plt.plot(np.linspace(0,nb_train_batch,int(nb_train_batch/validation_frequency)+1), validation_cross_entropy_mean, label="validation")
+        plt.title("loss during training")
         plt.xlabel("Training batch")
-        plt.ylabel("crossentropymean")
+        plt.ylabel("loss")
         plt.show()
         plt.close()
 
