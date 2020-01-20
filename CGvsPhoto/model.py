@@ -809,16 +809,22 @@ class Model:
             batch_clock = time.time()
        
       print('   saving validation accuracy...')
-      file = open(acc_name, 'w', newline='')
+      loss_name = self.dir_summaries + run_name + "/loss_accuracy_" + run_name + ".csv"
+      file1 = open(acc_name, 'w', newline='')
+      file2 = open(loss_name, 'w', newline='')
 
       try:
-          writer = csv.writer(file)
+          writer1 = csv.writer(file1)
+          writer2 = csv.writer(file2)
        
           for v in validation_accuracy:
-            writer.writerow([str(v)])
+            writer1.writerow([str(v)])
+          for v in validation_cross_entropy_mean:
+            writer2.writerow([str(v)])
       finally:
 
-          file.close()
+          file1.close()
+          file2.close()
           print('   done.')
 
 
