@@ -703,6 +703,7 @@ class Model:
     run_name = str('pat'+ str(self.image_size) + '_tra' + str(self.nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(self.lr) + '_keep' + str(self.keep_neuron) + 'b')
     path_save = self.dir_ckpt + run_name
     acc_name = self.dir_summaries + run_name + "/validation_accuracy_" + run_name + ".csv"
+    loss_name = self.dir_summaries + run_name + "/loss_accuracy_" + run_name + ".csv"
 
 
     # computation time tick
@@ -809,7 +810,6 @@ class Model:
             batch_clock = time.time()
        
       print('   saving validation accuracy...')
-      loss_name = self.dir_summaries + run_name + "/loss_accuracy_" + run_name + ".csv"
       file1 = open(acc_name, 'w', newline='')
       file2 = open(loss_name, 'w', newline='')
 
