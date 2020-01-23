@@ -1123,9 +1123,7 @@ class Model:
     """
     # define
     
-    train_batch = int(1000000/self.batch_size)
-    iteration = int(train_batch*0.75)
-    
+    train_batch = int(750000/self.batch_size)
     
     valid_decision_rule = ['majority_vote', 'weighted_vote']
     if decision_rule not in valid_decision_rule:
@@ -1148,8 +1146,8 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      print('   pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
-      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(iteration) + '.ckpt')
+      print('   pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(train_batch) + '.ckpt')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(train_batch) + '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(test_data_path, subimage_size = self.image_size, only_green = only_green)
