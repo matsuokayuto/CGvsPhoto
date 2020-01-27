@@ -1485,7 +1485,7 @@ class Model:
     :type minibatch_size: int
     """
     if(save_images):
-      test_name = str('pat'+ str(self.image_size) + '_tra' + str(nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b')
+      test_name = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b')
       path_save = self.dir_visualization + test_name
       if not os.path.exists(self.dir_visualization + test_name):
         os.mkdir(self.dir_visualization + test_name)
