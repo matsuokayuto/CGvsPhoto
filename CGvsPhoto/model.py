@@ -1506,7 +1506,6 @@ class Model:
 
       data_test = il.Test_loader(data_path, 
                                  subimage_size = self.image_size, only_green = self.only_green)
-      t3 = time.time()
       for i in range(nb_images):
         batch, label, width, height, original, file_name = data_test.get_next_image()
         batch_size = batch.shape[0]
@@ -1539,9 +1538,6 @@ class Model:
                                      save_images = save_images,
                                      prob_map = prob_map,
                                      save_original= save_images)
-          t4 = time.time()
-          elapse_time = t4-t3
-          print(f"経過時間：{elapse_time}")
 
 
 if __name__ == '__main__':
