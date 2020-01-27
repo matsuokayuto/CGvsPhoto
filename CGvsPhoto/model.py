@@ -1507,13 +1507,13 @@ class Model:
       data_test = il.Test_loader(data_path, 
                                  subimage_size = self.image_size, only_green = self.only_green)
       for i in range(nb_images):
-        batch, label, width, height, original, file_name = data_test.get_next_image()
-        batch_size = batch.shape[0]
-        j = 0
-        labels = []
-        diff = []
         for s in range(len(test_images)):
           if i == test_images[s]:
+            batch, label, width, height, original, file_name = data_test.get_next_image()
+            batch_size = batch.shape[0]
+            j = 0
+            labels = []
+            diff = []
             while j < batch_size:
               feed_dict = {self.x: batch[j:j+minibatch_size], self.keep_prob: 1.0}
               pred = self.y_conv.eval(feed_dict)
