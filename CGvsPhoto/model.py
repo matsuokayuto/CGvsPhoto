@@ -1361,6 +1361,7 @@ class Model:
         plt.savefig(path_save + '/vis_' + file_name + '_original' + '.png', 
                   bbox_inches='tight',
                   pad_inches=0.0)
+        plt.close()
       if prob_map: 
         img = plt.figure(figsize = (nb_width, nb_height))
 
