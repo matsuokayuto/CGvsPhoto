@@ -1465,7 +1465,7 @@ class Model:
       
 
   def test_splicing(self, data_path, nb_images, save_images = True, show_images = False, prob_map = False,
-                    minibatch_size = 25):
+                    train_batch = 15000, keep = 0.65, learning = 1e-4, minibatch_size = 25):
     """Computes image visualization for spliced images
 
     Decomposes each image into patches (with size = self.image_size), computes the posterior probability of each class
@@ -1485,7 +1485,7 @@ class Model:
     :type minibatch_size: int
     """
     if(save_images):
-      test_name = input("   Choose a name for the test : ")
+      test_name = str('pat'+ str(self.image_size) + '_tra' + str(nb_train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b')
       path_save = self.dir_visualization + test_name
       if not os.path.exists(self.dir_visualization + test_name):
         os.mkdir(self.dir_visualization + test_name)
@@ -1499,8 +1499,7 @@ class Model:
       print('   variable initialization ...')
       tf.global_variables_initializer().run()
       tf.local_variables_initializer().run()
-      file_to_restore = input("\nName of the file to restore (Directory : " + 
-                              self.dir_ckpt + ') : ')
+      file_to_restore = str('pat'+ str(self.image_size) + '_tra' + str(train_batch) + '_bat' + str(self.batch_size) + '_lr' + str(learning) + '_keep' + str(keep) + 'b' + str(train_batch) + '.ckpt')
       saver.restore(sess, self.dir_ckpt + file_to_restore)
 
       data_test = il.Test_loader(data_path, 
