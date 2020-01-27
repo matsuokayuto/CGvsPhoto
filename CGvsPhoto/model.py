@@ -1514,7 +1514,7 @@ class Model:
         labels = []
         diff = []
         for s in range(len(test_images)):
-          if i == list[s]:
+          if i == test_images[s]:
             while j < batch_size:
               feed_dict = {self.x: batch[j:j+minibatch_size], self.keep_prob: 1.0}
               pred = self.y_conv.eval(feed_dict)
