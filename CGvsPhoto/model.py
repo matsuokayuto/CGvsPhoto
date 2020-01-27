@@ -1464,7 +1464,7 @@ class Model:
       plt.show(img_filtered2)
       
 
-  def test_splicing(self, data_path, nb_images, save_images = True, show_images = False,
+  def test_splicing(self, data_path, nb_images, save_images = True, show_images = False, prob_map = False,
                     minibatch_size = 25):
     """Computes image visualization for spliced images
 
@@ -1534,7 +1534,7 @@ class Model:
                                  original = original,
                                  show_images = show_images,
                                  save_images = save_images,
-                                 prob_map = save_images, 
+                                 prob_map = prob_map, 
                                  save_original= save_images)
       t4 = time.time()
       elapse_time = t4-t3
