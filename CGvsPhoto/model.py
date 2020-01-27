@@ -1466,7 +1466,8 @@ class Model:
       
 
   def test_splicing(self, data_path, nb_images, save_images = True, show_images = False, prob_map = False,
-                    train_batch = 15000, keep = 0.65, learning = 1e-4, minibatch_size = 25):
+                    train_batch = 15000, keep = 0.65, learning = 1e-4, minibatch_size = 25,
+                    test_images = [0, 1, 2]):
     """Computes image visualization for spliced images
 
     Decomposes each image into patches (with size = self.image_size), computes the posterior probability of each class
@@ -1512,33 +1513,35 @@ class Model:
         j = 0
         labels = []
         diff = []
-        while j < batch_size:
-          feed_dict = {self.x: batch[j:j+minibatch_size], self.keep_prob: 1.0}
-          pred = self.y_conv.eval(feed_dict)
-          label_image = np.argmax(pred, 1)
-          d = np.max(pred, 1) - np.min(pred, 1)
-          for k in range(d.shape[0]):
-            diff.append(np.round(d[k], 1))
-          for l in label_image:
-            labels.append(data_test.image_class[l])
-          j+=minibatch_size
+        for s in range(len(test_images)):
+          if i == list[s]:
+            while j < batch_size:
+              feed_dict = {self.x: batch[j:j+minibatch_size], self.keep_prob: 1.0}
+              pred = self.y_conv.eval(feed_dict)
+              label_image = np.argmax(pred, 1)
+              d = np.max(pred, 1) - np.min(pred, 1)
+              for k in range(d.shape[0]):
+                diff.append(np.round(d[k], 1))
+              for l in label_image:
+                labels.append(data_test.image_class[l])
+              j+=minibatch_size
 
-        diff = np.array(diff)
+            diff = np.array(diff)
 
         
-        self.image_visualization(path_save = path_save, 
-                                 file_name = str(i), 
-                                 images = batch, labels_pred = labels, 
-                                 true_label = label, width = width, 
-                                 height = height, diff = diff,
-                                 original = original,
-                                 show_images = show_images,
-                                 save_images = save_images,
-                                 prob_map = prob_map, 
-                                 save_original= save_images)
-      t4 = time.time()
-      elapse_time = t4-t3
-      print(f"経過時間：{elapse_time}")
+            self.image_visualization(path_save = path_save, 
+                                     file_name = str(i), 
+                                     images = batch, labels_pred = labels, 
+                                     true_label = label, width = width, 
+                                     height = height, diff = diff,
+                                     original = original,
+                                     show_images = show_images,
+                                     save_images = save_images,
+                                     prob_map = prob_map,
+                                     save_original= save_images)
+          t4 = time.time()
+          elapse_time = t4-t3
+          print(f"経過時間：{elapse_time}")
 
 
 if __name__ == '__main__':
