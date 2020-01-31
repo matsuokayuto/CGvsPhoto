@@ -233,7 +233,7 @@ class Model:
     
     # read the configuration file
     conf = configparser.ConfigParser()
-    conf.read('/home/secure/CGvsPhoto2/Textures/config.ini')
+    conf.read('/Users/augus/CGvsPhoto2/Textures/config.ini')
 
     if config not in conf:
       raise ValueError(config + ' is not in the config.ini file... Please create the corresponding section')
